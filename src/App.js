@@ -5,6 +5,7 @@ import { auth } from './firebase/config';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import FlatSetup from './components/FlatSetup';
+import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);

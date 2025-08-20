@@ -3,6 +3,7 @@ import { signOut } from 'firebase/auth';
 import { doc, getDoc, collection, addDoc, query, where, onSnapshot, updateDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import { useNavigate } from 'react-router-dom';
+import '../App.css';
 
 function Dashboard() {
   const [flatId, setFlatId] = useState(null);
@@ -100,116 +101,118 @@ function Dashboard() {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>HouseHelper</h1>
+    <div className="dashboard-container">
+      <div className="header">
+        <h1>🏠 HouseHelper</h1>
         <div>
-          <span style={{ marginRight: '20px' }}>Flat Code: {flatId}</span>
+          <span style={{ marginRight: '20px' }}>Flat Code: <strong>{flatId}</strong></span>
           <button onClick={() => signOut(auth)}>Logout</button>
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '10px', margin: '20px 0' }}>
+      <div className="tabs">
         <button 
           onClick={() => setActiveTab('chores')}
-          style={{ padding: '10px 20px', background: activeTab === 'chores' ? '#007bff' : '#ccc' }}
+          className={`tab-button ${activeTab === 'chores' ? 'active' : ''}`}
         >
-          Chores
+          🧹 Chores
         </button>
         <button 
           onClick={() => setActiveTab('bills')}
-          style={{ padding: '10px 20px', background: activeTab === 'bills' ? '#007bff' : '#ccc' }}
+          className={`tab-button ${activeTab === 'bills' ? 'active' : ''}`}
         >
-          Bills
+          💰 Bills
         </button>
         <button 
           onClick={() => setActiveTab('shopping')}
-          style={{ padding: '10px 20px', background: activeTab === 'shopping' ? '#007bff' : '#ccc' }}
+          className={`tab-button ${activeTab === 'shopping' ? 'active' : ''}`}
         >
-          Shopping
+          🛒 Shopping
         </button>
       </div>
 
-      {activeTab === 'chores' && (
-        <div>
-          <h2>Chores</h2>
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <input
-              placeholder="Add new chore"
-              value={newChore}
-              onChange={(e) => setNewChore(e.target.value)}
-              style={{ flex: 1, padding: '10px' }}
-            />
-            <button onClick={addChore}>Add</button>
-          </div>
-          {chores.map(chore => (
-            <div key={chore.id} style={{ padding: '10px', border: '1px solid #ccc', margin: '5px 0' }}>
+      <div className="content">
+        {activeTab === 'chores' && (
+          <div>
+            <h2>Household Chores</h2>
+            <div className="input-group">
               <input
-                type="checkbox"
-                checked={chore.completed}
-                onChange={() => toggleChore(chore.id, chore.completed)}
+                placeholder="Add new chore..."
+                value={newChore}
+                onChange={(e) => setNewChore(e.target.value)}
               />
-              <span style={{ marginLeft: '10px', textDecoration: chore.completed ? 'line-through' : 'none' }}>
-                {chore.task}
-              </span>
+              <button onClick={addChore}>Add Chore</button>
             </div>
-          ))}
-        </div>
-      )}
-
-      {activeTab === 'bills' && (
-        <div>
-          <h2>Bills</h2>
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <input
-              placeholder="Bill name"
-              value={newBill.name}
-              onChange={(e) => setNewBill({...newBill, name: e.target.value})}
-              style={{ flex: 1, padding: '10px' }}
-            />
-            <input
-              placeholder="Amount"
-              type="number"
-              value={newBill.amount}
-              onChange={(e) => setNewBill({...newBill, amount: e.target.value})}
-              style={{ width: '100px', padding: '10px' }}
-            />
-            <button onClick={addBill}>Add</button>
+            {chores.map(chore => (
+              <div key={chore.id} className="item-card">
+                <input
+                  type="checkbox"
+                  className="checkbox"
+                  checked={chore.completed}
+                  onChange={() => toggleChore(chore.id, chore.completed)}
+                />
+                <span className={`item-text ${chore.completed ? 'completed' : ''}`}>
+                  {chore.task}
+                </span>
+              </div>
+            ))}
           </div>
-          {bills.map(bill => (
-            <div key={bill.id} style={{ padding: '10px', border: '1px solid #ccc', margin: '5px 0' }}>
-              <strong>{bill.name}</strong>: €{bill.amount}
-            </div>
-          ))}
-        </div>
-      )}
+        )}
 
-      {activeTab === 'shopping' && (
-        <div>
-          <h2>Shopping List</h2>
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <input
-              placeholder="Add item"
-              value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
-              style={{ flex: 1, padding: '10px' }}
-            />
-            <button onClick={addShoppingItem}>Add</button>
-          </div>
-          {shopping.map(item => (
-            <div key={item.id} style={{ padding: '10px', border: '1px solid #ccc', margin: '5px 0' }}>
+        {activeTab === 'bills' && (
+          <div>
+            <h2>Shared Bills</h2>
+            <div className="input-group">
               <input
-                type="checkbox"
-                checked={item.purchased}
-                onChange={() => toggleShopping(item.id, item.purchased)}
+                placeholder="Bill name..."
+                value={newBill.name}
+                onChange={(e) => setNewBill({...newBill, name: e.target.value})}
               />
-              <span style={{ marginLeft: '10px', textDecoration: item.purchased ? 'line-through' : 'none' }}>
-                {item.item}
-              </span>
+              <input
+                placeholder="Amount"
+                type="number"
+                value={newBill.amount}
+                onChange={(e) => setNewBill({...newBill, amount: e.target.value})}
+                style={{ maxWidth: '150px' }}
+              />
+              <button onClick={addBill}>Add Bill</button>
             </div>
-          ))}
-        </div>
-      )}
+            {bills.map(bill => (
+              <div key={bill.id} className="item-card">
+                <span className="item-text">{bill.name}</span>
+                <span className="bill-amount">€{bill.amount}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeTab === 'shopping' && (
+          <div>
+            <h2>Shopping List</h2>
+            <div className="input-group">
+              <input
+                placeholder="Add item to shopping list..."
+                value={newItem}
+                onChange={(e) => setNewItem(e.target.value)}
+              />
+              <button onClick={addShoppingItem}>Add Item</button>
+            </div>
+            {shopping.map(item => (
+              <div key={item.id} className="item-card">
+                <input
+                  type="checkbox"
+                  className="checkbox"
+                  checked={item.purchased}
+                  onChange={() => toggleShopping(item.id, item.purchased)}
+                />
+                <span className={`item-text ${item.purchased ? 'completed' : ''}`}>
+                  {item.item}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
