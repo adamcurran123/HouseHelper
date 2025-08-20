@@ -6,13 +6,13 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #882ae7 100%);
   min-height: 100vh;
 }
 
 /* Login/Setup Pages */
 .auth-container {
-  background: white;
+  background: rgb(153, 152, 152);
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   padding: 40px;
@@ -22,7 +22,7 @@ body {
 
 /* Dashboard */
 .dashboard-container {
-  background: white;
+  background: rgb(153, 152, 152);
   min-height: 100vh;
   max-width: 1200px;
   margin: 0 auto;
@@ -30,7 +30,7 @@ body {
 }
 
 .header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #8b24f3 100%);
   color: white;
   padding: 20px 40px;
   display: flex;
