@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { signOut } from 'firebase/auth';
 import { doc, getDoc, collection, addDoc, query, where, onSnapshot, updateDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
   const [flatId, setFlatId] = useState(null);
@@ -9,6 +10,7 @@ function Dashboard() {
   const [chores, setChores] = useState([]);
   const [bills, setBills] = useState([]);
   const [shopping, setShopping] = useState([]);
+  const navigate = useNavigate();
   
   // Form states
   const [newChore, setNewChore] = useState('');
@@ -46,8 +48,10 @@ function Dashboard() {
 
   const loadUserFlat = async () => {
     const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
-    if (userDoc.exists()) {
+    if (userDoc.exists() && userDoc.data().flatId) {
       setFlatId(userDoc.data().flatId);
+    } else {
+      navigate('/setup');
     }
   };
 
